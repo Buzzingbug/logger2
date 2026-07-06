@@ -1,0 +1,137 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Guild configuration
+model Guild {
+  id          String   @id @default(cuid())
+  guildId     String   @unique
+  name        String
+  iconUrl     String?
+
+  // Logging toggles
+  logEnabled    Boolean  @default(true)
+  logChannelId  String?
+  logMessages   Boolean  @default(true)
+  logMembers    Boolean  @default(true)
+  logVoice      Boolean  @default(true)
+  logChannels   Boolean  @default(true)
+  logRoles      Boolean  @default(true)
+  logServer     Boolean  @default(true)
+  logModeration Boolean  @default(true)
+  logInvites    Boolean  @default(true)
+  logEmojis     Boolean  @default(true)
+  logThreads    Boolean  @default(true)
+  logWebhooks   Boolean  @default(true)
+  logScheduled  Boolean  @default(true)
+  logPolls      Boolean  @default(true)
+  logAutomod    Boolean  @default(true)
+
+  // Embed customization
+  embedColor    String   @default("#5865F2")
+  embedFooter   String?
+  showAvatars   Boolean  @default(true)
+
+  // Retention
+  retentionDays Int      @default(90)
+
+  // Ignore lists
+  ignoredChannels String[]
+  ignoredRoles    String[]
+  ignoredUsers    String[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  logs    LogEvent[]
+  filters LogFilter[]
+  stats   DailyStats[]
+
+  @@index([guildId])
+}
+
+// Log events
+model LogEvent {
+  id        String   @id @default(cuid())
+  guildId   String
+  guild     Guild    @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  eventType String
+  category  String
+  channelId String?
+  userId    String?
+  messageId String?
+  data      Json     @default("{}")
+  embedColor String?
+  embedTitle String?
+
+  createdAt DateTime @default(now())
+
+  content LogContent?
+
+  @@index([guildId, eventType])
+  @@index([guildId, createdAt])
+  @@index([guildId, userId])
+  @@index([createdAt])
+}
+
+// Full-text search content
+model LogContent {
+  id         String   @id @default(cuid())
+  logEventId String   @unique
+  logEvent   LogEvent @relation(fields: [logEventId], references: [id], onDelete: Cascade)
+  content    String
+
+  @@index([content], type: Gin)
+}
+
+// Saved filters
+model LogFilter {
+  id         String   @id @default(cuid())
+  guildId    String
+  guild      Guild    @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  name       String
+  eventTypes String[]
+  userIds    String[]
+  channelIds String[]
+  searchQuery String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Daily analytics
+model DailyStats {
+  id      String   @id @default(cuid())
+  guildId String
+  guild   Guild    @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  date    DateTime @db.Date
+
+  totalEvents    Int @default(0)
+  messageEvents  Int @default(0)
+  memberEvents   Int @default(0)
+  voiceEvents    Int @default(0)
+  modEvents      Int @default(0)
+  uniqueUsers    Int @default(0)
+  uniqueChannels Int @default(0)
+
+  @@unique([guildId, date])
+  @@index([guildId])
+}
+
+// Audit log
+model AuditLog {
+  id      String @id @default(cuid())
+  guildId String
+  userId  String
+  action  String
+  details Json   @default("{}")
+
+  createdAt DateTime @default(now())
+
+  @@index([guildId, createdAt])
+}
