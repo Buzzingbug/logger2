@@ -8,10 +8,9 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "discord.js": "^14.16.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "typescript": "^5.7.0"
   }
 }

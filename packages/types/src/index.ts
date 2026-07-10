@@ -1,14 +1,3 @@
-import type {
-  Guild,
-  TextChannel,
-  VoiceChannel,
-  GuildMember,
-  Role,
-  Message,
-  User,
-  EmbedBuilder,
-} from 'discord.js';
-
 export interface LogEventData {
   // Message events
   messageDelete?: {
