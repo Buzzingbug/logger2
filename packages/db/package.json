@@ -9,6 +9,7 @@
     "push": "prisma db push",
     "migrate": "prisma migrate dev",
     "studio": "prisma studio",
+    "prebuild": "prisma generate",
     "build": "tsc",
     "typecheck": "tsc --noEmit"
   },
@@ -16,6 +17,7 @@
     "@prisma/client": "^6.4.0"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "prisma": "^6.4.0",
     "typescript": "^5.7.0"
   }
