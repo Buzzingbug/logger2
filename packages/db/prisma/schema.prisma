@@ -86,7 +86,7 @@ model LogContent {
   logEvent   LogEvent @relation(fields: [logEventId], references: [id], onDelete: Cascade)
   content    String
 
-  @@index([content], type: Gin)
+  @@index([content])
 }
 
 // Saved filters
