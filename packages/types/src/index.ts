@@ -19,6 +19,23 @@ export interface LogEventData {
     channel: LogChannel;
     messages: Array<{ id: string; content: string; author: LogUser }>;
   };
+  messageReactionAdd?: {
+    user: LogUser;
+    emoji: string;
+    messageContent: string;
+  };
+  messageReactionRemove?: {
+    user: LogUser;
+    emoji: string;
+  };
+  messagePin?: {
+    user: LogUser;
+    messageContent: string;
+  };
+  messageUnpin?: {
+    user: LogUser;
+    messageContent: string;
+  };
 
   // Member events
   memberJoin?: {
@@ -35,6 +52,11 @@ export interface LogEventData {
     oldNickname: string | null;
     newNickname: string | null;
   };
+  memberAvatarUpdate?: {
+    user: LogUser;
+    oldAvatar: string | null;
+    newAvatar: string | null;
+  };
   memberRoleAdd?: {
     user: LogUser;
     role: LogRole;
@@ -42,6 +64,9 @@ export interface LogEventData {
   memberRoleRemove?: {
     user: LogUser;
     role: LogRole;
+  };
+  memberPrune?: {
+    count: number;
   };
 
   // Voice events
@@ -60,6 +85,35 @@ export interface LogEventData {
     oldChannel: LogChannel;
     newChannel: LogChannel;
   };
+  voiceDeafen?: {
+    user: LogUser;
+    channel?: LogChannel;
+  };
+  voiceUndeafen?: {
+    user: LogUser;
+    channel?: LogChannel;
+  };
+  voiceMute?: {
+    user: LogUser;
+    channel?: LogChannel;
+  };
+  voiceUnmute?: {
+    user: LogUser;
+    channel?: LogChannel;
+  };
+  voiceStageStart?: {
+    user: LogUser;
+    channel: LogChannel;
+  };
+  voiceStageEnd?: {
+    user: LogUser;
+    channel: LogChannel;
+  };
+  voiceStageUpdate?: {
+    user: LogUser;
+    channel: LogChannel;
+    changes: VoiceStageChange[];
+  };
 
   // Channel events
   channelCreate?: {
@@ -72,6 +126,10 @@ export interface LogEventData {
     oldChannel: LogChannel;
     newChannel: LogChannel;
     changes: ChannelChange[];
+  };
+  channelPermissionUpdate?: {
+    channel: LogChannel;
+    changes: ChannelPermissionChange[];
   };
 
   // Role events
@@ -94,6 +152,14 @@ export interface LogEventData {
     oldIcon: string | null;
     newIcon: string | null;
     changes: ServerChange[];
+  };
+  serverBoostStart?: {
+    user: LogUser;
+    level: number;
+  };
+  serverBoostEnd?: {
+    user: LogUser;
+    level: number;
   };
 
   // Moderation events
@@ -118,6 +184,143 @@ export interface LogEventData {
     reason: string | null;
     duration: string;
   };
+  modTimeoutRemove?: {
+    user: LogUser;
+    moderator: LogUser;
+  };
+
+  // Invite events
+  inviteCreate?: {
+    code: string;
+    inviter: LogUser | null;
+    channel: LogChannel | null;
+    uses: number;
+    maxUses: number;
+    maxAge: number;
+    temporary: boolean;
+  };
+  inviteDelete?: {
+    code: string;
+    channel: LogChannel | null;
+    uses: number;
+  };
+
+  // Emoji events
+  emojiCreate?: {
+    name: string;
+    id: string;
+    url: string;
+  };
+  emojiDelete?: {
+    name: string;
+    id: string;
+  };
+  emojiUpdate?: {
+    name: string;
+    id: string;
+    changes: EmojiChange[];
+  };
+
+  // Thread events
+  threadCreate?: {
+    name: string;
+    id: string;
+    parent: LogChannel | null;
+    autoArchiveDuration: number;
+  };
+  threadDelete?: {
+    name: string;
+    id: string;
+    parent: LogChannel | null;
+  };
+  threadUpdate?: {
+    name: string;
+    id: string;
+    changes: ThreadChange[];
+  };
+
+  // Webhook events
+  webhookUpdate?: {
+    channel: LogChannel;
+  };
+
+  // Scheduled events
+  scheduledEventCreate?: {
+    name: string;
+    id: string;
+    channel: LogChannel | null;
+    startTime: string | null;
+    endTime: string | null;
+    status: number;
+  };
+  scheduledEventDelete?: {
+    name: string;
+    id: string;
+  };
+  scheduledEventUpdate?: {
+    name: string;
+    id: string;
+    changes: ScheduledEventChange[];
+  };
+
+  // Poll events
+  pollCreate?: {
+    question: string;
+    channel: LogChannel;
+  };
+  pollEnd?: {
+    question: string;
+    channel: LogChannel;
+  };
+  pollVoteAdd?: {
+    user: LogUser;
+    answerId: number;
+    channel: LogChannel;
+  };
+  pollVoteRemove?: {
+    user: LogUser;
+    answerId: number;
+    channel: LogChannel;
+  };
+
+  // Automod events
+  automodAction?: {
+    ruleName: string;
+    user: LogUser;
+    channel: LogChannel;
+    action: string;
+  };
+}
+
+export interface VoiceStageChange {
+  field: string;
+  old: string;
+  new: string;
+}
+
+export interface ChannelPermissionChange {
+  type: 'role' | 'member';
+  id: string;
+  allow: string[];
+  deny: string[];
+}
+
+export interface EmojiChange {
+  field: string;
+  old: string;
+  new: string;
+}
+
+export interface ThreadChange {
+  field: string;
+  old: string;
+  new: string;
+}
+
+export interface ScheduledEventChange {
+  field: string;
+  old: string;
+  new: string;
 }
 
 export interface LogUser {
