@@ -1,6 +1,15 @@
 import { Worker, Job } from 'bullmq';
 import { prisma } from '@logger/db';
-import { redis, logger } from '@logger/utils';
+import { logger } from '@logger/utils';
+
+function getRedisConnection() {
+  const url = process.env.REDIS_URL ?? 'redis://localhost:6379';
+  return {
+    url,
+    maxRetriesPerRequest: null,
+    enableReadyCheck: false,
+  };
+}
 
 interface LogJobData {
   guildId: string;
@@ -67,7 +76,7 @@ export const logWorker = new Worker(
     return { eventId: event.id };
   },
   {
-    connection: redis,
+    connection: getRedisConnection(),
     concurrency: 10,
     limiter: {
       max: 100,

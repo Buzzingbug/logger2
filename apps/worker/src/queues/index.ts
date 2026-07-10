@@ -1,10 +1,18 @@
-import { Queue, Worker, QueueScheduler } from 'bullmq';
-import { redis } from '@logger/utils';
+import { Queue } from 'bullmq';
 import { logger } from '@logger/utils';
+
+function getRedisConnection() {
+  const url = process.env.REDIS_URL ?? 'redis://localhost:6379';
+  return {
+    url,
+    maxRetriesPerRequest: null,
+    enableReadyCheck: false,
+  };
+}
 
 // Queue definitions
 export const logQueue = new Queue('log-processing', {
-  connection: redis,
+  connection: getRedisConnection(),
   defaultJobOptions: {
     attempts: 3,
     backoff: {
@@ -17,7 +25,7 @@ export const logQueue = new Queue('log-processing', {
 });
 
 export const statsQueue = new Queue('stats-aggregation', {
-  connection: redis,
+  connection: getRedisConnection(),
   defaultJobOptions: {
     attempts: 5,
     backoff: {
@@ -30,7 +38,7 @@ export const statsQueue = new Queue('stats-aggregation', {
 });
 
 export const cleanupQueue = new Queue('log-cleanup', {
-  connection: redis,
+  connection: getRedisConnection(),
   defaultJobOptions: {
     attempts: 3,
     backoff: {
@@ -41,8 +49,3 @@ export const cleanupQueue = new Queue('log-cleanup', {
     removeOnFail: { age: 86400 },
   },
 });
-
-// Queue schedulers
-new QueueScheduler('log-processing', { connection: redis.duplicate() });
-new QueueScheduler('stats-aggregation', { connection: redis.duplicate() });
-new QueueScheduler('log-cleanup', { connection: redis.duplicate() });

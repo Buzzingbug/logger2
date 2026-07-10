@@ -1,13 +1,26 @@
-import { QueueScheduler } from 'bullmq';
-import { prisma } from '@logger/db';
-import { redis, logger } from '@logger/utils';
-import { cleanupQueue } from '../queues/index.js';
+import { Queue } from 'bullmq';
+import { logger } from '@logger/utils';
 
-// Schedule daily cleanup at 3 AM UTC
+function getRedisConnection() {
+  const url = process.env.REDIS_URL ?? 'redis://localhost:6379';
+  return {
+    url,
+    maxRetriesPerRequest: null,
+    enableReadyCheck: false,
+  };
+}
+
+const cleanupQueue = new Queue('log-cleanup', {
+  connection: getRedisConnection(),
+});
+
+const statsQueue = new Queue('stats-aggregation', {
+  connection: getRedisConnection(),
+});
+
 export function scheduleCleanup(): void {
   logger.info('Scheduling daily cleanup job');
 
-  // Run cleanup every day at 3 AM UTC
   cleanupQueue.add(
     'daily-cleanup',
     {},
@@ -20,11 +33,8 @@ export function scheduleCleanup(): void {
   );
 }
 
-// Schedule stats aggregation every hour
 export function scheduleStatsAggregation(): void {
   logger.info('Scheduling hourly stats aggregation');
-
-  const { statsQueue } = require('../queues/index.js');
 
   statsQueue.add(
     'hourly-stats',
@@ -40,5 +50,4 @@ export function scheduleStatsAggregation(): void {
 
 export function setupSchedulers(): void {
   scheduleCleanup();
-  // scheduleStatsAggregation(); // Enable when ready
 }

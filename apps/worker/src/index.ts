@@ -1,6 +1,5 @@
 import { logger } from '@logger/utils';
 import { logWorker, cleanupWorker } from './workers/index.js';
-import { logQueue, cleanupQueue } from './queues/index.js';
 import { setupSchedulers } from './schedulers/cleanup.scheduler.js';
 import { prisma } from '@logger/db';
 
