@@ -1,5 +1,4 @@
 import { Queue } from 'bullmq';
-import { logger } from '@logger/utils';
 
 function getRedisConnection() {
   const url = process.env.REDIS_URL ?? 'redis://localhost:6379';
