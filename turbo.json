@@ -1,6 +1,20 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
+  "globalEnv": [
+    "NODE_ENV",
+    "LOG_LEVEL",
+    "DISCORD_TOKEN",
+    "DISCORD_CLIENT_ID",
+    "DISCORD_CLIENT_SECRET",
+    "DATABASE_URL",
+    "REDIS_URL",
+    "NEXTAUTH_URL",
+    "NEXTAUTH_SECRET",
+    "TOTAL_SHARDS",
+    "DEV_GUILD_ID",
+    "PORT"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
