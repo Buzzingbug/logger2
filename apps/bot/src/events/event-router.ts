@@ -20,6 +20,7 @@ import { onRoleCreate } from '../modules/roles/role-create.js';
 import { onRoleDelete } from '../modules/roles/role-delete.js';
 import { onRoleUpdate } from '../modules/roles/role-update.js';
 
+import { onGuildCreate } from '../modules/server/guild-create.js';
 import { onGuildUpdate } from '../modules/server/guild-update.js';
 
 import { onGuildBanAdd } from '../modules/moderation/ban.js';
@@ -73,6 +74,7 @@ export function registerEvents(client: LoggerClient): void {
   client.on(Events.GuildRoleUpdate, onRoleUpdate as AnyFunc);
 
   // Server events
+  client.on(Events.GuildCreate, onGuildCreate as AnyFunc);
   client.on(Events.GuildUpdate, onGuildUpdate as AnyFunc);
 
   // Moderation events

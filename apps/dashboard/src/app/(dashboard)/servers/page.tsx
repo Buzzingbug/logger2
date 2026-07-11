@@ -42,7 +42,7 @@ export default async function ServersPage() {
               Add Logger to your Discord server to get started
             </p>
             <a
-              href="https://discord.com/api/oauth2/authorize"
+              href={`https://discord.com/api/oauth2/authorize?client_id=${process.env.DISCORD_CLIENT_ID}&permissions=8&scope=bot%20applications.commands`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-[#5865f2] hover:bg-[#4752c4] text-white px-6 py-3 rounded-lg font-medium transition-colors"

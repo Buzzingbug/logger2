@@ -16,6 +16,31 @@ async function main() {
 
   await client.login(env.DISCORD_TOKEN);
 
+  // Sync existing guilds to the database
+  try {
+    const { prisma } = await import('@logger/db');
+    const guilds = client.guilds.cache;
+    logger.info(`Syncing ${guilds.size} guilds to the database...`);
+    
+    for (const [id, guild] of guilds) {
+      await prisma.guild.upsert({
+        where: { guildId: id },
+        update: {
+          name: guild.name,
+          iconUrl: guild.iconURL(),
+        },
+        create: {
+          guildId: id,
+          name: guild.name,
+          iconUrl: guild.iconURL(),
+        },
+      });
+    }
+    logger.info('Successfully synced all guilds');
+  } catch (error) {
+    logger.error({ error }, 'Failed to sync guilds on startup');
+  }
+
   logger.info(`Logger bot ready on shard ${shardId}/${shardCount}`);
 }
 
