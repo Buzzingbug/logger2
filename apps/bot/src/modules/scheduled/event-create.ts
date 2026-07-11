@@ -8,7 +8,7 @@ export async function onGuildScheduledEventCreate(
 ): Promise<void> {
   if (!event.guild) return;
 
-  const channel = event.channel as TextChannel;
+  const channel = event.channel as any;
   const channelData = channel ? formatChannel(channel) : null;
 
   await client.logger.log({
@@ -20,8 +20,8 @@ export async function onGuildScheduledEventCreate(
         name: event.name,
         id: event.id,
         channel: channelData,
-        startTime: event.scheduledStartAt?.toISOString(),
-        endTime: event.scheduledEndAt?.toISOString(),
+        startTime: event.scheduledStartAt?.toISOString() ?? null,
+        endTime: event.scheduledEndAt?.toISOString() ?? null,
         status: event.status,
       },
     },

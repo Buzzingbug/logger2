@@ -1,15 +1,15 @@
-import { GuildMember, Guild } from 'discord.js';
+import { GuildMember, AuditLogEvent, User } from 'discord.js';
 import type { LoggerClient } from '../../core/client.js';
 import { formatUser } from '@logger/utils';
 
 export async function onGuildMemberRemove(client: LoggerClient, member: GuildMember): Promise<void> {
   const auditLogs = await member.guild.fetchAuditLogs({
-    type: 2,
+    type: AuditLogEvent.MemberKick,
     limit: 1,
   });
 
   const kickLog = auditLogs.entries.first();
-  if (kickLog && kickLog.target?.id === member.id) {
+  if (kickLog && kickLog.targetId === member.id) {
     const moderator = kickLog.executor;
 
     await client.logger.log({
@@ -21,7 +21,7 @@ export async function onGuildMemberRemove(client: LoggerClient, member: GuildMem
         modKick: {
           user: formatUser(member.user),
           moderator: moderator
-            ? formatUser(moderator)
+            ? formatUser(moderator as User)
             : { id: 'unknown', tag: 'Unknown', avatarUrl: null, isBot: false },
           reason: kickLog.reason,
         },

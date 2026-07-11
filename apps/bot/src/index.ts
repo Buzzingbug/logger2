@@ -1,4 +1,4 @@
-import type { LoggerClient } from './core/client.js';
+
 import { createClient } from './core/client.js';
 import { registerInteractionHandlers } from './events/interactions.js';
 import { logger } from '@logger/utils';

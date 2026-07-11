@@ -1,4 +1,4 @@
-import { EmbedBuilder, TextChannel, Guild } from 'discord.js';
+import { EmbedBuilder, TextChannel } from 'discord.js';
 import { prisma } from '@logger/db';
 import { logger as pinoLogger } from '@logger/utils';
 import type { LogEventInput, GuildConfig } from '@logger/types';
