@@ -1,5 +1,6 @@
 import { TextChannel } from 'discord.js';
 import type { LoggerClient } from '../../core/client.js';
+import { formatChannel } from '@logger/utils';
 
 export async function onWebhookUpdate(
   client: LoggerClient,
@@ -14,7 +15,7 @@ export async function onWebhookUpdate(
     channelId: channel.id,
     data: {
       webhookUpdate: {
-        channel: { id: channel.id, name: channel.name, mention: channel.toString() },
+        channel: formatChannel(channel),
       },
     },
   });

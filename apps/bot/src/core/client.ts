@@ -21,7 +21,6 @@ export function createClient(shardId: number, shardCount: number): LoggerClient 
       GatewayIntentBits.GuildInvites,
       GatewayIntentBits.GuildWebhooks,
       GatewayIntentBits.MessageContent,
-      GatewayIntentBits.GuildPresences,
       GatewayIntentBits.GuildScheduledEvents,
       GatewayIntentBits.AutoModerationConfiguration,
       GatewayIntentBits.AutoModerationExecution,

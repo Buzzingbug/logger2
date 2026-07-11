@@ -33,10 +33,6 @@ manager.on('shardCreate', (shard) => {
   });
 });
 
-manager.on('error', (error) => {
-  logger.error({ error }, 'ShardingManager error');
-});
-
 logger.info('Starting Logger bot...');
 
 manager.spawn({ timeout: 30_000 }).catch((error) => {

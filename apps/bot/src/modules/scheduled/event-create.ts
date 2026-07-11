@@ -1,11 +1,15 @@
-import { GuildScheduledEvent } from 'discord.js';
+import { GuildScheduledEvent, TextChannel } from 'discord.js';
 import type { LoggerClient } from '../../core/client.js';
+import { formatChannel } from '@logger/utils';
 
 export async function onGuildScheduledEventCreate(
   client: LoggerClient,
   event: GuildScheduledEvent,
 ): Promise<void> {
   if (!event.guild) return;
+
+  const channel = event.channel as TextChannel;
+  const channelData = channel ? formatChannel(channel) : null;
 
   await client.logger.log({
     guildId: event.guild.id,
@@ -15,7 +19,7 @@ export async function onGuildScheduledEventCreate(
       scheduledEventCreate: {
         name: event.name,
         id: event.id,
-        channel: event.channel ? { id: event.channel.id, name: event.channel.name } : null,
+        channel: channelData,
         startTime: event.scheduledStartAt?.toISOString(),
         endTime: event.scheduledEndAt?.toISOString(),
         status: event.status,

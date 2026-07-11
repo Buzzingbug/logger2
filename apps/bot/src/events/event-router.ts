@@ -1,9 +1,8 @@
-import { Events, Message, MessageReaction, GuildMember, GuildChannel, TextChannel, VoiceState, VoiceChannel, Role, Invite, GuildEmoji, ThreadChannel, GuildBan, GuildScheduledEvent, User, Guild } from 'discord.js';
+import { Events } from 'discord.js';
 import type { LoggerClient } from '../core/client.js';
 import { logger } from '@logger/utils';
 import { onMessageDelete } from '../modules/messages/message-delete.js';
 import { onMessageUpdate } from '../modules/messages/message-edit.js';
-import { onMessageDeleteBulk } from '../modules/messages/message-bulk-delete.js';
 import { onMessageReactionAdd } from '../modules/messages/reaction-add.js';
 import { onMessageReactionRemove } from '../modules/messages/reaction-remove.js';
 
@@ -52,7 +51,6 @@ export function registerEvents(client: LoggerClient): void {
   // Message events
   client.on(Events.MessageDelete, onMessageDelete as AnyFunc);
   client.on(Events.MessageUpdate, onMessageUpdate as AnyFunc);
-  client.on(Events.MessageDeleteBulk, onMessageDeleteBulk as AnyFunc);
   client.on(Events.MessageReactionAdd, onMessageReactionAdd as AnyFunc);
   client.on(Events.MessageReactionRemove, onMessageReactionRemove as AnyFunc);
 

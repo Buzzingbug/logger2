@@ -1,4 +1,4 @@
-import type { Guild, User, TextChannel, VoiceChannel } from 'discord.js';
+import type { Guild, User, TextChannel, VoiceChannel, StageChannel } from 'discord.js';
 import type { LogUser, LogChannel, LogGuild } from '@logger/types';
 
 export function formatUser(user: User): LogUser {
@@ -10,7 +10,7 @@ export function formatUser(user: User): LogUser {
   };
 }
 
-export function formatChannel(channel: TextChannel | VoiceChannel): LogChannel {
+export function formatChannel(channel: TextChannel | VoiceChannel | StageChannel): LogChannel {
   return {
     id: channel.id,
     name: channel.name,
