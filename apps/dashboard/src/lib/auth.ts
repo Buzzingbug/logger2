@@ -4,10 +4,13 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@logger/db';
 
 if (process.env.NEXTAUTH_URL) {
-  delete process.env.NEXTAUTH_URL;
-}
-if (process.env.AUTH_URL) {
-  delete process.env.AUTH_URL;
+  const baseUrl = process.env.NEXTAUTH_URL.endsWith('/') 
+    ? process.env.NEXTAUTH_URL.slice(0, -1) 
+    : process.env.NEXTAUTH_URL;
+  
+  // Force Auth.js to use the correct absolute URL, fixing both Railway's localhost proxy bug 
+  // and Auth.js beta 25's base path parsing bug.
+  process.env.AUTH_URL = `${baseUrl}/api/auth`;
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
