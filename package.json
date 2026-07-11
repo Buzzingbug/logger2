@@ -5,8 +5,8 @@
   "description": "World-class Discord logging bot with 70+ event types",
   "scripts": {
     "dev": "turbo dev",
-    "build": "pnpm db:push --accept-data-loss && turbo build",
-    "start": "turbo start",
+    "build": "turbo build",
+    "start": "pnpm db:push --accept-data-loss && turbo start",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
