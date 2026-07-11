@@ -1,21 +1,12 @@
 import { Queue } from 'bullmq';
-import { logger } from '@logger/utils';
-
-function getRedisConnection() {
-  const url = process.env.REDIS_URL ?? 'redis://localhost:6379';
-  return {
-    url,
-    maxRetriesPerRequest: null,
-    enableReadyCheck: false,
-  };
-}
+import { logger, redis } from '@logger/utils';
 
 const cleanupQueue = new Queue('log-cleanup', {
-  connection: getRedisConnection(),
+  connection: redis,
 });
 
 const statsQueue = new Queue('stats-aggregation', {
-  connection: getRedisConnection(),
+  connection: redis,
 });
 
 export function scheduleCleanup(): void {

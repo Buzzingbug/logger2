@@ -1,15 +1,6 @@
 import { Worker, Job } from 'bullmq';
 import { prisma } from '@logger/db';
-import { logger } from '@logger/utils';
-
-function getRedisConnection() {
-  const url = process.env.REDIS_URL ?? 'redis://localhost:6379';
-  return {
-    url,
-    maxRetriesPerRequest: null,
-    enableReadyCheck: false,
-  };
-}
+import { logger, redis } from '@logger/utils';
 
 interface CleanupJobData {
   guildId?: string;
@@ -71,7 +62,7 @@ export const cleanupWorker = new Worker(
     return { deleted: result.count };
   },
   {
-    connection: getRedisConnection(),
+    connection: redis,
     concurrency: 5,
   },
 );

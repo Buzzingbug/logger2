@@ -1,17 +1,9 @@
 import { Queue } from 'bullmq';
-
-function getRedisConnection() {
-  const url = process.env.REDIS_URL ?? 'redis://localhost:6379';
-  return {
-    url,
-    maxRetriesPerRequest: null,
-    enableReadyCheck: false,
-  };
-}
+import { redis } from '@logger/utils';
 
 // Queue definitions
 export const logQueue = new Queue('log-processing', {
-  connection: getRedisConnection(),
+  connection: redis,
   defaultJobOptions: {
     attempts: 3,
     backoff: {
@@ -24,7 +16,7 @@ export const logQueue = new Queue('log-processing', {
 });
 
 export const statsQueue = new Queue('stats-aggregation', {
-  connection: getRedisConnection(),
+  connection: redis,
   defaultJobOptions: {
     attempts: 5,
     backoff: {
@@ -37,7 +29,7 @@ export const statsQueue = new Queue('stats-aggregation', {
 });
 
 export const cleanupQueue = new Queue('log-cleanup', {
-  connection: getRedisConnection(),
+  connection: redis,
   defaultJobOptions: {
     attempts: 3,
     backoff: {
