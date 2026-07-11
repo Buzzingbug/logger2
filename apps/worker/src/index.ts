@@ -1,3 +1,4 @@
+import '@logger/config';
 import { logger } from '@logger/utils';
 import { logWorker, cleanupWorker } from './workers/index.js';
 import { setupSchedulers } from './schedulers/cleanup.scheduler.js';
