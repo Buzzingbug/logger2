@@ -3,6 +3,13 @@ import DiscordProvider from 'next-auth/providers/discord';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@logger/db';
 
+if (process.env.NEXTAUTH_URL) {
+  delete process.env.NEXTAUTH_URL;
+}
+if (process.env.AUTH_URL) {
+  delete process.env.AUTH_URL;
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   basePath: '/api/auth',
   secret: process.env.NEXTAUTH_SECRET,
