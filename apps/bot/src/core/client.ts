@@ -1,12 +1,11 @@
 import { Client, GatewayIntentBits, Partials, ActivityType } from 'discord.js';
 import { LoggerService } from '../services/logger.service.js';
 import { CacheService } from '../services/cache.service.js';
-import { EventRouter } from '../events/event-router.js';
+import { registerEvents } from '../events/event-router.js';
 
 export interface LoggerClient extends Client {
   logger: LoggerService;
   cache: CacheService;
-  eventRouter: EventRouter;
   startTime: number;
 }
 
@@ -48,8 +47,9 @@ export function createClient(shardId: number, shardCount: number): LoggerClient 
 
   client.logger = new LoggerService(client);
   client.cache = new CacheService();
-  client.eventRouter = new EventRouter(client);
   client.startTime = Date.now();
+
+  registerEvents(client);
 
   return client;
 }

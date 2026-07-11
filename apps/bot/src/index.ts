@@ -1,6 +1,5 @@
 import type { LoggerClient } from './core/client.js';
 import { createClient } from './core/client.js';
-import { registerEvents } from './events/event-router.js';
 import { registerInteractionHandlers } from './events/interactions.js';
 import { logger } from '@logger/utils';
 import { env } from '@logger/config';
@@ -13,7 +12,6 @@ async function main() {
 
   const client = createClient(shardId, shardCount);
 
-  registerEvents(client);
   registerInteractionHandlers(client);
 
   await client.login(env.DISCORD_TOKEN);

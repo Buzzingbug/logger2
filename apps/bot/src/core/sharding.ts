@@ -16,9 +16,11 @@ manager.on('shardCreate', (shard) => {
     logger.info(`[Shard ${shard.id}] Ready`);
   });
 
-  shard.on('death', (process) => {
-    if (process.pid) {
-      logger.error(`[Shard ${shard.id}] Died (PID: ${process.pid})`);
+  shard.on('death', (processOrWorker) => {
+    if ('pid' in processOrWorker && processOrWorker.pid) {
+      logger.error(`[Shard ${shard.id}] Died (PID: ${processOrWorker.pid})`);
+    } else {
+      logger.error(`[Shard ${shard.id}] Worker died`);
     }
   });
 
