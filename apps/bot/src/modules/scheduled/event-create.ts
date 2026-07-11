@@ -5,6 +5,8 @@ export async function onGuildScheduledEventCreate(
   client: LoggerClient,
   event: GuildScheduledEvent,
 ): Promise<void> {
+  if (!event.guild) return;
+
   await client.logger.log({
     guildId: event.guild.id,
     eventType: 'scheduled_event_create',

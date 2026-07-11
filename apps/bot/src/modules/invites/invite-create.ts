@@ -1,12 +1,12 @@
-import { Invite } from 'discord.js';
+import { Invite, TextChannel } from 'discord.js';
 import type { LoggerClient } from '../../core/client.js';
 import { formatUser, formatChannel } from '@logger/utils';
 
 export async function onInviteCreate(client: LoggerClient, invite: Invite): Promise<void> {
   if (!invite.guild) return;
 
-  const channel = invite.channel as any;
-  const channelData = channel ? { id: channel.id, name: channel.name, mention: `<#${channel.id}>`, type: channel.type.toString() } : null;
+  const channel = invite.channel as TextChannel;
+  const channelData = channel ? formatChannel(channel) : null;
 
   await client.logger.log({
     guildId: invite.guild.id,

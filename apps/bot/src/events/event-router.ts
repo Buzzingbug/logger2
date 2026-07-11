@@ -1,4 +1,4 @@
-import { Events, Message, MessageReaction, GuildMember, GuildChannel, TextChannel, VoiceState, VoiceChannel, Role, Invite, GuildEmoji, ThreadChannel, GuildBan, GuildScheduledEvent, Webhook } from 'discord.js';
+import { Events, Message, MessageReaction, GuildMember, GuildChannel, TextChannel, VoiceState, VoiceChannel, Role, Invite, GuildEmoji, ThreadChannel, GuildBan, GuildScheduledEvent, User, Guild } from 'discord.js';
 import type { LoggerClient } from '../core/client.js';
 import { logger } from '@logger/utils';
 import { onMessageDelete } from '../modules/messages/message-delete.js';
@@ -44,51 +44,65 @@ import { onGuildScheduledEventCreate } from '../modules/scheduled/event-create.j
 import { onGuildScheduledEventDelete } from '../modules/scheduled/event-delete.js';
 import { onGuildScheduledEventUpdate } from '../modules/scheduled/event-update.js';
 
+type AnyFunc = (...args: unknown[]) => void;
+
 export function registerEvents(client: LoggerClient): void {
   logger.info('Registering event handlers...');
 
-  client.on(Events.MessageDelete, (message: Message) => onMessageDelete(client, message).catch(logger.error));
-  client.on(Events.MessageUpdate, (oldMsg: Message, newMsg: Message) => onMessageUpdate(client, oldMsg, newMsg).catch(logger.error));
-  client.on(Events.MessageDeleteBulk, (messages, channel: TextChannel) => onMessageDeleteBulk(client, messages, channel).catch(logger.error));
-  client.on(Events.MessageReactionAdd, (reaction: MessageReaction, user) => onMessageReactionAdd(client, reaction, user).catch(logger.error));
-  client.on(Events.MessageReactionRemove, (reaction: MessageReaction, user) => onMessageReactionRemove(client, reaction, user).catch(logger.error));
+  // Message events
+  client.on(Events.MessageDelete, onMessageDelete as AnyFunc);
+  client.on(Events.MessageUpdate, onMessageUpdate as AnyFunc);
+  client.on(Events.MessageDeleteBulk, onMessageDeleteBulk as AnyFunc);
+  client.on(Events.MessageReactionAdd, onMessageReactionAdd as AnyFunc);
+  client.on(Events.MessageReactionRemove, onMessageReactionRemove as AnyFunc);
 
-  client.on(Events.GuildMemberAdd, (member: GuildMember) => onMemberJoin(client, member).catch(logger.error));
-  client.on(Events.GuildMemberRemove, (member: GuildMember) => onMemberLeave(client, member).catch(logger.error));
-  client.on(Events.GuildMemberUpdate, (oldMember: GuildMember, newMember: GuildMember) => onMemberUpdate(client, oldMember, newMember).catch(logger.error));
+  // Member events
+  client.on(Events.GuildMemberAdd, onMemberJoin as AnyFunc);
+  client.on(Events.GuildMemberRemove, onMemberLeave as AnyFunc);
+  client.on(Events.GuildMemberUpdate, onMemberUpdate as AnyFunc);
 
-  client.on(Events.VoiceStateUpdate, (oldState: VoiceState, newState: VoiceState) => onVoiceStateUpdate(client, oldState, newState).catch(logger.error));
+  // Voice events
+  client.on(Events.VoiceStateUpdate, onVoiceStateUpdate as AnyFunc);
 
-  client.on(Events.ChannelCreate, (channel: GuildChannel) => onChannelCreate(client, channel).catch(logger.error));
-  client.on(Events.ChannelDelete, (channel: GuildChannel) => onChannelDelete(client, channel).catch(logger.error));
-  client.on(Events.ChannelUpdate, (oldChannel: GuildChannel, newChannel: GuildChannel) => onChannelUpdate(client, oldChannel, newChannel).catch(logger.error));
+  // Channel events
+  client.on(Events.ChannelCreate, onChannelCreate as AnyFunc);
+  client.on(Events.ChannelDelete, onChannelDelete as AnyFunc);
+  client.on(Events.ChannelUpdate, onChannelUpdate as AnyFunc);
 
-  client.on(Events.GuildRoleCreate, (role: Role) => onRoleCreate(client, role).catch(logger.error));
-  client.on(Events.GuildRoleDelete, (role: Role) => onRoleDelete(client, role).catch(logger.error));
-  client.on(Events.GuildRoleUpdate, (oldRole: Role, newRole: Role) => onRoleUpdate(client, oldRole, newRole).catch(logger.error));
+  // Role events
+  client.on(Events.GuildRoleCreate, onRoleCreate as AnyFunc);
+  client.on(Events.GuildRoleDelete, onRoleDelete as AnyFunc);
+  client.on(Events.GuildRoleUpdate, onRoleUpdate as AnyFunc);
 
-  client.on(Events.GuildUpdate, (oldGuild, newGuild) => onGuildUpdate(client, oldGuild, newGuild).catch(logger.error));
+  // Server events
+  client.on(Events.GuildUpdate, onGuildUpdate as AnyFunc);
 
-  client.on(Events.GuildBanAdd, (ban: GuildBan) => onGuildBanAdd(client, ban).catch(logger.error));
-  client.on(Events.GuildBanRemove, (ban: GuildBan) => onGuildBanRemove(client, ban).catch(logger.error));
-  client.on(Events.GuildMemberRemove, (member: GuildMember) => onGuildMemberRemove(client, member).catch(logger.error));
+  // Moderation events
+  client.on(Events.GuildBanAdd, onGuildBanAdd as AnyFunc);
+  client.on(Events.GuildBanRemove, onGuildBanRemove as AnyFunc);
+  client.on(Events.GuildMemberRemove, onGuildMemberRemove as AnyFunc);
 
-  client.on(Events.InviteCreate, (invite: Invite) => onInviteCreate(client, invite).catch(logger.error));
-  client.on(Events.InviteDelete, (invite: Invite) => onInviteDelete(client, invite).catch(logger.error));
+  // Invite events
+  client.on(Events.InviteCreate, onInviteCreate as AnyFunc);
+  client.on(Events.InviteDelete, onInviteDelete as AnyFunc);
 
-  client.on(Events.GuildEmojiCreate, (emoji: GuildEmoji) => onEmojiCreate(client, emoji).catch(logger.error));
-  client.on(Events.GuildEmojiDelete, (emoji: GuildEmoji) => onEmojiDelete(client, emoji).catch(logger.error));
-  client.on(Events.GuildEmojiUpdate, (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => onEmojiUpdate(client, oldEmoji, newEmoji).catch(logger.error));
+  // Emoji events
+  client.on(Events.GuildEmojiCreate, onEmojiCreate as AnyFunc);
+  client.on(Events.GuildEmojiDelete, onEmojiDelete as AnyFunc);
+  client.on(Events.GuildEmojiUpdate, onEmojiUpdate as AnyFunc);
 
-  client.on(Events.ThreadCreate, (thread: ThreadChannel) => onThreadCreate(client, thread).catch(logger.error));
-  client.on(Events.ThreadDelete, (thread: ThreadChannel) => onThreadDelete(client, thread).catch(logger.error));
-  client.on(Events.ThreadUpdate, (oldThread: ThreadChannel, newThread: ThreadChannel) => onThreadUpdate(client, oldThread, newThread).catch(logger.error));
+  // Thread events
+  client.on(Events.ThreadCreate, onThreadCreate as AnyFunc);
+  client.on(Events.ThreadDelete, onThreadDelete as AnyFunc);
+  client.on(Events.ThreadUpdate, onThreadUpdate as AnyFunc);
 
-  client.on(Events.WebhooksUpdate, (channel: TextChannel) => onWebhookUpdate(client, channel).catch(logger.error));
+  // Webhook events
+  client.on(Events.WebhooksUpdate, onWebhookUpdate as AnyFunc);
 
-  client.on(Events.GuildScheduledEventCreate, (event: GuildScheduledEvent) => onGuildScheduledEventCreate(client, event).catch(logger.error));
-  client.on(Events.GuildScheduledEventDelete, (event: GuildScheduledEvent) => onGuildScheduledEventDelete(client, event).catch(logger.error));
-  client.on(Events.GuildScheduledEventUpdate, (oldEvent: GuildScheduledEvent, newEvent: GuildScheduledEvent) => onGuildScheduledEventUpdate(client, oldEvent, newEvent).catch(logger.error));
+  // Scheduled event events
+  client.on(Events.GuildScheduledEventCreate, onGuildScheduledEventCreate as AnyFunc);
+  client.on(Events.GuildScheduledEventDelete, onGuildScheduledEventDelete as AnyFunc);
+  client.on(Events.GuildScheduledEventUpdate, onGuildScheduledEventUpdate as AnyFunc);
 
   logger.info('Event handlers registered');
 }

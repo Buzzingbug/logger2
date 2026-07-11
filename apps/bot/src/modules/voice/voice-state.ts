@@ -1,4 +1,4 @@
-import { VoiceState } from 'discord.js';
+import { VoiceState, VoiceBasedChannel } from 'discord.js';
 import type { LoggerClient } from '../../core/client.js';
 import { formatUser, formatChannel } from '@logger/utils';
 
@@ -26,7 +26,7 @@ export async function onVoiceStateUpdate(
       data: {
         voiceJoin: {
           user: formatUser(member.user),
-          channel: formatChannel(newState.channel),
+          channel: formatChannel(newState.channel as VoiceBasedChannel),
           memberCount: newState.channel.members.size,
         },
       },
@@ -44,7 +44,7 @@ export async function onVoiceStateUpdate(
       data: {
         voiceLeave: {
           user: formatUser(member.user),
-          channel: formatChannel(oldState.channel),
+          channel: formatChannel(oldState.channel as VoiceBasedChannel),
           memberCount: oldState.channel.members.size,
         },
       },
@@ -62,8 +62,8 @@ export async function onVoiceStateUpdate(
       data: {
         voiceMove: {
           user: formatUser(member.user),
-          oldChannel: formatChannel(oldState.channel),
-          newChannel: formatChannel(newState.channel),
+          oldChannel: formatChannel(oldState.channel as VoiceBasedChannel),
+          newChannel: formatChannel(newState.channel as VoiceBasedChannel),
         },
       },
     });
@@ -81,7 +81,7 @@ export async function onVoiceStateUpdate(
       data: {
         [eventType]: {
           user: formatUser(member.user),
-          channel: newState.channel ? formatChannel(newState.channel) : undefined,
+          channel: newState.channel ? formatChannel(newState.channel as VoiceBasedChannel) : undefined,
         },
       },
     });
@@ -98,7 +98,7 @@ export async function onVoiceStateUpdate(
       data: {
         [eventType]: {
           user: formatUser(member.user),
-          channel: newState.channel ? formatChannel(newState.channel) : undefined,
+          channel: newState.channel ? formatChannel(newState.channel as VoiceBasedChannel) : undefined,
         },
       },
     });

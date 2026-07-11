@@ -16,7 +16,7 @@ export async function onGuildBanAdd(client: LoggerClient, ban: GuildBan): Promis
         moderator: executor
           ? formatUser(executor.user)
           : { id: 'unknown', tag: 'Unknown', avatarUrl: null, isBot: false },
-        reason: ban.reason,
+        reason: ban.reason ?? null,
       },
     },
   });

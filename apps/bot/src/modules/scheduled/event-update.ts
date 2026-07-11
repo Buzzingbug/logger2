@@ -6,6 +6,8 @@ export async function onGuildScheduledEventUpdate(
   oldEvent: GuildScheduledEvent,
   newEvent: GuildScheduledEvent,
 ): Promise<void> {
+  if (!newEvent.guild) return;
+
   const changes: Array<{ field: string; old: string; new: string }> = [];
 
   if (oldEvent.name !== newEvent.name) {

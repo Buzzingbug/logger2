@@ -24,7 +24,7 @@ manager.on('shardCreate', (shard) => {
     }
   });
 
-  shard.on('error', (error) => {
+  shard.on('error', (error: Error) => {
     logger.error({ shardId: shard.id, error }, `[Shard ${shard.id}] Error`);
   });
 

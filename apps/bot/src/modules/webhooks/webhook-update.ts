@@ -1,4 +1,4 @@
-import { Guild, TextChannel } from 'discord.js';
+import { TextChannel } from 'discord.js';
 import type { LoggerClient } from '../../core/client.js';
 
 export async function onWebhookUpdate(

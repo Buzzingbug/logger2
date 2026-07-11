@@ -17,7 +17,7 @@ export async function onThreadCreate(client: LoggerClient, thread: ThreadChannel
         name: thread.name,
         id: thread.id,
         parent: parentChannel,
-        autoArchiveDuration: thread.autoArchiveDuration,
+        autoArchiveDuration: thread.autoArchiveDuration ?? 0,
       },
     },
   });

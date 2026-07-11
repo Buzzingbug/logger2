@@ -6,7 +6,7 @@ export async function onInviteDelete(client: LoggerClient, invite: Invite): Prom
   if (!invite.guild) return;
 
   const channel = invite.channel as any;
-  const channelData = channel ? { id: channel.id, name: channel.name, mention: `<#${channel.id}>` } : null;
+  const channelData = channel ? formatChannel(channel) : null;
 
   await client.logger.log({
     guildId: invite.guild.id,
