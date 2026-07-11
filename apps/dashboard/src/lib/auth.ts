@@ -3,6 +3,10 @@ import DiscordProvider from 'next-auth/providers/discord';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@logger/db';
 
+// Map existing env vars to Auth.js v5 expected env vars
+process.env.AUTH_SECRET = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+process.env.AUTH_URL = process.env.AUTH_URL || process.env.NEXTAUTH_URL;
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   trustHost: true,
