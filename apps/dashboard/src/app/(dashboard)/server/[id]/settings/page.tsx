@@ -1,5 +1,5 @@
 import { prisma } from '@logger/db';
-import { updateGuildConfig } from '@/lib/db';
+
 
 export default async function SettingsPage({
   params,
