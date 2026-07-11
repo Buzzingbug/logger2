@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { prisma } from '@logger/db';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const guilds = await prisma.guild.findMany({
     orderBy: { name: 'asc' },
   });
