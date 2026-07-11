@@ -16,7 +16,6 @@ export async function onVoiceStateUpdate(
   const userId = member.id;
   const guildId = guild.id;
 
-  // Join
   if (!oldState.channel && newState.channel) {
     await client.logger.log({
       guildId,
@@ -35,7 +34,6 @@ export async function onVoiceStateUpdate(
     return;
   }
 
-  // Leave
   if (oldState.channel && !newState.channel) {
     await client.logger.log({
       guildId,
@@ -54,7 +52,6 @@ export async function onVoiceStateUpdate(
     return;
   }
 
-  // Move
   if (oldState.channel && newState.channel && oldState.channel.id !== newState.channel.id) {
     await client.logger.log({
       guildId,
@@ -73,7 +70,6 @@ export async function onVoiceStateUpdate(
     return;
   }
 
-  // Deafen
   if (oldState.deaf !== newState.deaf) {
     const eventType = newState.deaf ? 'voice_deafen' : 'voice_undeafen';
     await client.logger.log({
@@ -91,7 +87,6 @@ export async function onVoiceStateUpdate(
     });
   }
 
-  // Mute
   if (oldState.mute !== newState.mute) {
     const eventType = newState.mute ? 'voice_mute' : 'voice_unmute';
     await client.logger.log({

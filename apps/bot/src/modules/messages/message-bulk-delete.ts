@@ -4,12 +4,12 @@ import { formatUser, formatChannel } from '@logger/utils';
 
 export async function onMessageDeleteBulk(
   client: LoggerClient,
-  messages: Collection<Snowflake, Message | PartialMessage>,
+  messages: Collection<Snowflake, Message>,
+  channel: TextChannel,
 ): Promise<void> {
   if (!messages.first()?.guild) return;
 
   const guild = messages.first()!.guild!;
-  const channel = messages.first()!.channel as TextChannel;
 
   const deletedMessages = messages.map((msg) => ({
     id: msg.id,

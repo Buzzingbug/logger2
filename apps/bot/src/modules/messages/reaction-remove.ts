@@ -7,8 +7,7 @@ export async function onMessageReactionRemove(
   reaction: MessageReaction,
   user: User,
 ): Promise<void> {
-  if (!reaction.message.guild) return;
-  if (user.bot) return;
+  if (!reaction.message.guild || user.bot) return;
 
   await client.logger.log({
     guildId: reaction.message.guild.id,

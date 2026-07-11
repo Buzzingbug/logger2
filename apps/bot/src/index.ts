@@ -13,11 +13,9 @@ async function main() {
 
   const client = createClient(shardId, shardCount);
 
-  // Register event handlers
   registerEvents(client);
   registerInteractionHandlers(client);
 
-  // Login
   await client.login(env.DISCORD_TOKEN);
 
   logger.info(`Logger bot ready on shard ${shardId}/${shardCount}`);

@@ -1,9 +1,12 @@
 import { Invite } from 'discord.js';
 import type { LoggerClient } from '../../core/client.js';
-import { formatUser } from '@logger/utils';
+import { formatUser, formatChannel } from '@logger/utils';
 
 export async function onInviteCreate(client: LoggerClient, invite: Invite): Promise<void> {
   if (!invite.guild) return;
+
+  const channel = invite.channel as any;
+  const channelData = channel ? { id: channel.id, name: channel.name, mention: `<#${channel.id}>`, type: channel.type.toString() } : null;
 
   await client.logger.log({
     guildId: invite.guild.id,
@@ -15,11 +18,11 @@ export async function onInviteCreate(client: LoggerClient, invite: Invite): Prom
       inviteCreate: {
         code: invite.code,
         inviter: invite.inviter ? formatUser(invite.inviter) : null,
-        channel: invite.channel ? { id: invite.channel.id, name: invite.channel.name, mention: `<#${invite.channel.id}>` } : null,
-        uses: invite.uses,
-        maxUses: invite.maxUses,
-        maxAge: invite.maxAge,
-        temporary: invite.temporary,
+        channel: channelData,
+        uses: invite.uses ?? 0,
+        maxUses: invite.maxUses ?? 0,
+        maxAge: invite.maxAge ?? 0,
+        temporary: invite.temporary ?? false,
       },
     },
   });

@@ -1,8 +1,7 @@
-import { EmbedBuilder, TextChannel, Guild, GuildMember } from 'discord.js';
+import { EmbedBuilder, TextChannel, Guild } from 'discord.js';
 import { prisma } from '@logger/db';
 import { logger as pinoLogger } from '@logger/utils';
 import type { LogEventInput, GuildConfig } from '@logger/types';
-import { EMBED_COLORS } from '@logger/config';
 
 export class LoggerService {
   private logger = pinoLogger.child({ service: 'LoggerService' });
@@ -11,23 +10,15 @@ export class LoggerService {
 
   async log(event: LogEventInput): Promise<void> {
     try {
-      // Check if guild logging is enabled
       const guildConfig = await this.getGuildConfig(event.guildId);
       if (!guildConfig || !guildConfig.logEnabled) return;
 
-      // Check if this event type is enabled
       if (!this.isEventEnabled(guildConfig, event.category)) return;
 
-      // Check ignore lists
       if (this.isIgnored(guildConfig, event.channelId, event.userId)) return;
 
-      // Store in database
       await this.storeEvent(event);
-
-      // Send to Discord channel
       await this.sendLog(event, guildConfig);
-
-      // Update daily stats
       await this.updateStats(event.guildId, event.category);
     } catch (error) {
       this.logger.error({ error, event }, 'Failed to log event');
@@ -132,7 +123,6 @@ export class LoggerService {
     const embed = this.buildEmbed(event, config);
     if (!embed) return;
 
-    // Rate limit: try to send, if rate limited, queue it
     try {
       await channel.send({ embeds: [embed] });
     } catch (error: any) {
@@ -160,7 +150,6 @@ export class LoggerService {
       embed.setFooter({ text: config.embedFooter });
     }
 
-    // Build embed based on event type
     switch (event.eventType) {
       case 'message_delete':
         if (data.messageDelete) {

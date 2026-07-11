@@ -1,4 +1,4 @@
-import { GuildMember, TextChannel } from 'discord.js';
+import { GuildMember } from 'discord.js';
 import type { LoggerClient } from '../../core/client.js';
 import { formatUser } from '@logger/utils';
 
@@ -9,7 +9,6 @@ export async function onMemberUpdate(
 ): Promise<void> {
   const guildId = newMember.guild.id;
 
-  // Nickname change
   if (oldMember.nickname !== newMember.nickname) {
     await client.logger.log({
       guildId,
@@ -26,7 +25,6 @@ export async function onMemberUpdate(
     });
   }
 
-  // Avatar change
   if (oldMember.displayAvatarURL() !== newMember.displayAvatarURL()) {
     await client.logger.log({
       guildId,
@@ -43,7 +41,6 @@ export async function onMemberUpdate(
     });
   }
 
-  // Role changes
   const oldRoles = new Set(oldMember.roles.cache.keys());
   const newRoles = new Set(newMember.roles.cache.keys());
 

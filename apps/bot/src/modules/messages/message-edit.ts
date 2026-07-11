@@ -7,8 +7,7 @@ export async function onMessageUpdate(
   oldMessage: Message,
   newMessage: Message,
 ): Promise<void> {
-  if (!oldMessage.guild) return;
-  if (oldMessage.author?.bot) return;
+  if (!oldMessage.guild || oldMessage.author?.bot) return;
   if (oldMessage.content === newMessage.content) return;
 
   const channel = oldMessage.channel as TextChannel;

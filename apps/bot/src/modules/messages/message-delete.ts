@@ -1,31 +1,26 @@
-import { Events, Message, PartialMessage, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 import type { LoggerClient } from '../../core/client.js';
 import { formatUser, formatChannel } from '@logger/utils';
 
-export async function onMessageDelete(client: LoggerClient, message: Message | PartialMessage): Promise<void> {
-  if (!message.guild) return;
-  if (message.author?.bot) return;
+export async function onMessageDelete(client: LoggerClient, message: Message): Promise<void> {
+  if (!message.guild || message.author?.bot) return;
 
   const channel = message.channel as TextChannel;
   if (!channel) return;
 
   let content = message.content;
-  let attachments: string[] = [];
-  let embeds: unknown[] = [];
+  let attachments = message.attachments.map((a) => a.url);
+  let embeds = message.embeds;
 
-  // Fetch full message if partial
   if (message.partial) {
     try {
-      message = await message.fetch();
-      content = message.content;
-      attachments = message.attachments.map((a) => a.url);
-      embeds = message.embeds;
+      const fetched = await message.fetch();
+      content = fetched.content;
+      attachments = fetched.attachments.map((a) => a.url);
+      embeds = fetched.embeds;
     } catch {
-      return; // Message may have been deleted before we could fetch
+      return;
     }
-  } else {
-    attachments = message.attachments.map((a) => a.url);
-    embeds = message.embeds;
   }
 
   await client.logger.log({

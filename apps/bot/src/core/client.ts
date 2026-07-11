@@ -1,6 +1,4 @@
-import { Client, Collection, GatewayIntentBits, Partials, ActivityType } from 'discord.js';
-import { logger } from '@logger/utils';
-import { env } from '@logger/config';
+import { Client, GatewayIntentBits, Partials, ActivityType } from 'discord.js';
 import { LoggerService } from '../services/logger.service.js';
 import { CacheService } from '../services/cache.service.js';
 import { EventRouter } from '../events/event-router.js';

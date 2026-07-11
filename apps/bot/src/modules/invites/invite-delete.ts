@@ -1,8 +1,12 @@
 import { Invite } from 'discord.js';
 import type { LoggerClient } from '../../core/client.js';
+import { formatChannel } from '@logger/utils';
 
 export async function onInviteDelete(client: LoggerClient, invite: Invite): Promise<void> {
   if (!invite.guild) return;
+
+  const channel = invite.channel as any;
+  const channelData = channel ? { id: channel.id, name: channel.name, mention: `<#${channel.id}>` } : null;
 
   await client.logger.log({
     guildId: invite.guild.id,
@@ -12,8 +16,8 @@ export async function onInviteDelete(client: LoggerClient, invite: Invite): Prom
     data: {
       inviteDelete: {
         code: invite.code,
-        channel: invite.channel ? { id: invite.channel.id, name: invite.channel.name, mention: `<#${invite.channel.id}>` } : null,
-        uses: invite.uses,
+        channel: channelData,
+        uses: invite.uses ?? 0,
       },
     },
   });

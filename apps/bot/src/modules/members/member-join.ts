@@ -1,6 +1,6 @@
 import { GuildMember } from 'discord.js';
 import type { LoggerClient } from '../../core/client.js';
-import { formatUser, formatDate } from '@logger/utils';
+import { formatUser } from '@logger/utils';
 
 export async function onMemberJoin(client: LoggerClient, member: GuildMember): Promise<void> {
   if (member.user.bot) return;
@@ -13,7 +13,7 @@ export async function onMemberJoin(client: LoggerClient, member: GuildMember): P
     data: {
       memberJoin: {
         user: formatUser(member.user),
-        accountCreated: formatDate(member.user.createdAt),
+        accountCreated: member.user.createdAt.toISOString(),
         memberCount: member.guild.memberCount,
       },
     },

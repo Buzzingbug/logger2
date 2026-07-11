@@ -3,11 +3,12 @@ import type { LoggerClient } from '../../core/client.js';
 
 export async function onWebhookUpdate(
   client: LoggerClient,
-  guild: Guild,
   channel: TextChannel,
 ): Promise<void> {
+  if (!channel.guild) return;
+
   await client.logger.log({
-    guildId: guild.id,
+    guildId: channel.guild.id,
     eventType: 'webhook_update',
     category: 'webhooks',
     channelId: channel.id,

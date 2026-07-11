@@ -12,16 +12,16 @@ export function registerInteractionHandlers(client: LoggerClient): void {
     try {
       switch (commandName) {
         case 'logs':
-          await handleLogs(interaction, client);
+          await handleLogs(interaction);
           break;
         case 'config':
-          await handleConfig(interaction, client);
+          await handleConfig(interaction);
           break;
         case 'help':
           await handleHelp(interaction);
           break;
         case 'stats':
-          await handleStats(interaction, client);
+          await handleStats(interaction);
           break;
       }
     } catch (error) {
@@ -45,7 +45,7 @@ export function registerInteractionHandlers(client: LoggerClient): void {
   });
 }
 
-async function handleLogs(interaction: any, client: LoggerClient) {
+async function handleLogs(interaction: any): Promise<void> {
   await interaction.deferReply({ ephemeral: true });
 
   const sub = interaction.options.getSubcommand();
@@ -142,7 +142,7 @@ async function handleLogs(interaction: any, client: LoggerClient) {
   }
 }
 
-async function handleConfig(interaction: any, client: LoggerClient) {
+async function handleConfig(interaction: any): Promise<void> {
   const dashboardUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
   await interaction.reply({
@@ -160,7 +160,7 @@ async function handleConfig(interaction: any, client: LoggerClient) {
   });
 }
 
-async function handleHelp(interaction: any) {
+async function handleHelp(interaction: any): Promise<void> {
   const embed = new EmbedBuilder()
     .setColor(0x5865f2)
     .setTitle('Logger Commands')
@@ -196,7 +196,7 @@ async function handleHelp(interaction: any) {
   await interaction.reply({ embeds: [embed], ephemeral: true });
 }
 
-async function handleStats(interaction: any, client: LoggerClient) {
+async function handleStats(interaction: any): Promise<void> {
   await interaction.deferReply({ ephemeral: true });
 
   const guildId = interaction.guildId;
