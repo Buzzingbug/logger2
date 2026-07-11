@@ -62,7 +62,7 @@ export const cleanupWorker = new Worker(
     return { deleted: result.count };
   },
   {
-    connection: redis,
+    connection: redis as any,
     concurrency: 5,
   },
 );

@@ -67,7 +67,7 @@ export const logWorker = new Worker(
     return { eventId: event.id };
   },
   {
-    connection: redis,
+    connection: redis as any,
     concurrency: 10,
     limiter: {
       max: 100,

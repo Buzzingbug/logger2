@@ -3,7 +3,7 @@ import { redis } from '@logger/utils';
 
 // Queue definitions
 export const logQueue = new Queue('log-processing', {
-  connection: redis,
+  connection: redis as any,
   defaultJobOptions: {
     attempts: 3,
     backoff: {
@@ -16,7 +16,7 @@ export const logQueue = new Queue('log-processing', {
 });
 
 export const statsQueue = new Queue('stats-aggregation', {
-  connection: redis,
+  connection: redis as any,
   defaultJobOptions: {
     attempts: 5,
     backoff: {
@@ -29,7 +29,7 @@ export const statsQueue = new Queue('stats-aggregation', {
 });
 
 export const cleanupQueue = new Queue('log-cleanup', {
-  connection: redis,
+  connection: redis as any,
   defaultJobOptions: {
     attempts: 3,
     backoff: {

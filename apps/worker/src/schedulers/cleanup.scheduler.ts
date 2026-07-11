@@ -2,11 +2,11 @@ import { Queue } from 'bullmq';
 import { logger, redis } from '@logger/utils';
 
 const cleanupQueue = new Queue('log-cleanup', {
-  connection: redis,
+  connection: redis as any,
 });
 
 const statsQueue = new Queue('stats-aggregation', {
-  connection: redis,
+  connection: redis as any,
 });
 
 export function scheduleCleanup(): void {
