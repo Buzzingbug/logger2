@@ -1,4 +1,4 @@
-import { GuildScheduledEvent, TextChannel } from 'discord.js';
+import { GuildScheduledEvent } from 'discord.js';
 import type { LoggerClient } from '../../core/client.js';
 import { formatChannel } from '@logger/utils';
 
